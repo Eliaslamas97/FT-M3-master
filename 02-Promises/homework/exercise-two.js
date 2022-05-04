@@ -36,22 +36,27 @@ function problemA () {
    */
 
   // callback version
-  async.each(['poem-two/stanza-01.txt', 'poem-two/stanza-02.txt'],
-    function (filename, eachDone) {
-      readFile(filename, function (err, stanza) {
-        console.log('-- A. callback version --');
-        blue(stanza);
-        eachDone();
-      });
-    },
-    function (err) {
-      console.log('-- A. callback version done --');
-    }
-  );
+  // async.each(['poem-two/stanza-01.txt', 'poem-two/stanza-02.txt'],
+  //   function (filename, eachDone) {
+  //     readFile(filename, function (err, stanza) {
+  //       console.log('-- A. callback version --');
+  //       blue(stanza);
+  //       eachDone();
+  //     });
+  //   },
+  //   function (err) {
+  //     console.log('-- A. callback version done --');
+  //   }
+  // );
 
   // promise version
-  // ???
+  const promiseOne = promisifiedReadFile('poem-two/stanza-01.txt').then(stanza => blue(stanza))
+  const promiseTwo = promisifiedReadFile('poem-two/stanza-02.txt').then(stanza => blue(stanza))
 
+  Promise.all([promiseOne,promiseTwo])
+  .then(()=> {
+    console.log('done')
+  })
 }
 
 function problemB () {
@@ -69,22 +74,26 @@ function problemB () {
   });
 
   // callback version
-  async.each(filenames,
-    function (filename, eachDone) {
-      readFile(filename, function (err, stanza) {
-        console.log('-- B. callback version --');
-        blue(stanza);
-        eachDone();
-      });
-    },
-    function (err) {
-      console.log('-- B. callback version done --');
-    }
-  );
+  // async.each(filenames,
+  //   function (filename, eachDone) {
+  //     readFile(filename, function (err, stanza) {
+  //       console.log('-- B. callback version --');
+  //       blue(stanza);
+  //       eachDone();
+  //     });
+  //   },
+  //   function (err) {
+  //     console.log('-- B. callback version done --');
+  //   }
+  // );
 
   // promise version
-  // ???
+  const promises = filenames.map(fn => promisifiedReadFile(fn).then(stanza => blue(stanza)) ) 
 
+  Promise.all(promises)
+  .then (()=> {
+    console.log('done')
+  })
 }
 
 function problemC () {
